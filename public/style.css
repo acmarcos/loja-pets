@@ -1,65 +1,25 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b3d0b; /* verde escuro */
-  color: #d4e6d4; /* verde claro para o texto */
-}
-
-.topbar {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #145214; /* verde escuro intermediário */
-  padding: 10px 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.topbar-left,
-.topbar-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.topbar-center {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.cart-btn,
-.menu-btn,
-.login-btn {
-  background: none;
-  border: none;
-  margin: 0 8px;
-  font-size: 1.4em;
-  cursor: pointer;
-  color: #a1c490; /* verde claro para ícones */
-}
-
-.logo {
-  width: 48px;
-  height: 48px;
-  filter: brightness(0) saturate(100%) invert(52%) sepia(24%) saturate(828%) hue-rotate(69deg) brightness(77%) contrast(85%);
-}
-
-.logotext {
-  font-size: 1.8em;
-  color: #a1c490; /* verde claro */
-  font-weight: bold;
-  margin-top: 4px;
-  letter-spacing: 2px;
-}
-
-@media (max-width: 600px) {
-  .topbar-center .logotext {
-    font-size: 1.1em;
-  }
-  .logo {
-    width: 28px;
-    height: 28px;
-  }
-}
+    :root {
+            --dark-green: #22543d;
+            --light-green: #68d391;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+        }
+        .bg-dark-green { background-color: var(--dark-green); }
+        .text-light-green { color: var(--light-green); }
+        .border-light-green { border-color: var(--light-green); }
+        .scroll-container {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .product-card, .species-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover, .species-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
