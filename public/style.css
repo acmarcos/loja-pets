@@ -1,25 +1,24 @@
-    :root {
-            --dark-green: #22543d;
-            --light-green: #68d391;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ffffff;
-        }
-        .bg-dark-green { background-color: var(--dark-green); }
-        .text-light-green { color: var(--light-green); }
-        .border-light-green { border-color: var(--light-green); }
-        .scroll-container {
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-        .scroll-container::-webkit-scrollbar {
-            display: none;
-        }
-        .product-card, .species-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .product-card:hover, .species-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
+:root {
+    --dark-green: #22543d;
+    --light-green: #68d391;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+}
+.bg-dark-green { background-color: var(--dark-green); }
+.text-light-green { color: var(--light-green); }
+.border-light-green { border-color: var(--light-green); }
+.scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+.product-card, .species-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.product-card:hover, .species-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);

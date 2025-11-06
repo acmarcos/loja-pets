@@ -1,83 +1,49 @@
-// 1. Defina a URL base da sua API.
-// Mantenha como localhost para testes locais. Depois do deploy no Vercel, você mudará para o seu domínio do Vercel.
-const API_URL = 'http://localhost:3000/api'; 
+const API_URL = 'http://localhost:3000/api';
 
-const cart = [];
-// Removida a lista de produtos estática! Agora ela será buscada do backend.
-let products = []; // Variável para armazenar os produtos carregados do backend
+const STATIC_PRODUCTS = [
+    { id: 901, name: "Zoetis Apoquel", price: 160.54, image: "https://rbldistribuidora.agilecdn.com.br/74303.jpg?v=495-2049421201", category: "Medicamentos" },
+    { id: 902, name: "Arranhador para Gatos", price: 75.00, image: "https://placehold.co/400x300/68d391/22543d?text=Arranhador", category: "Acessórios" },
+    { id: 903, name: "Petiscos Naturais (100g)", price: 29.99, image: "https://placehold.co/400x300/1e3a24/68d391?text=Petisco", category: "Alimentos" },
+];
 
-// =========================================================================
-// FUNÇÕES DE COMUNICAÇÃO COM O BACKEND (NOVAS OU MODIFICADAS)
-// =========================================================================
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let products = [...STATIC_PRODUCTS]; 
+
+
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
 
 async function fetchProducts() {
     try {
-        // Faz a requisição GET para o endpoint de produtos do Node.js
         const response = await fetch(`${API_URL}/products`);
         
         if (!response.ok) {
-            // Se o status HTTP não for 200-299, lança um erro
             throw new Error(`Erro ao buscar produtos. Status: ${response.status}`);
         }
         
         const data = await response.json();
-        products = data; // Armazena os produtos na variável global
-        return data;
+        
+        const apiProducts = data;
+        
+        const combinedProducts = [...apiProducts];
+        STATIC_PRODUCTS.forEach(staticP => {
+            if (!combinedProducts.some(apiP => apiP.id === staticP.id)) {
+                combinedProducts.push(staticP);
+            }
+        });
+        
+        products = combinedProducts;
+        return apiProducts; 
+
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
-        showMessage('Não foi possível carregar os produtos. Verifique o servidor.', true);
-        // Retorna a lista local simulada como fallback se o servidor falhar (opcional)
-        // Você pode re-adicionar a lista estática aqui se desejar um fallback offline, ou retornar []
+        showMessage('Não foi possível carregar produtos da API. Exibindo apenas itens estáticos.', true); 
+        
+        products = STATIC_PRODUCTS; 
         return []; 
     }
 }
-
-// *** IMPORTANTE: Estas funções PRECISAM ser adaptadas para o BACKEND futuramente. ***
-// *** Por enquanto, elas permanecem SIMULADAS para manter a funcionalidade. ***
-
-function handleLogin(event) {
-    event.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    
-    // IDEALMENTE: Aqui você faria um fetch(API_URL + '/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) })
-    if (email && password) {
-        showMessage('Login simulado realizado com sucesso! (TODO: Implementar API)', false);
-        navigateTo('home');
-        document.getElementById('login-form').reset();
-    } else {
-        showMessage('Por favor, preencha todos os campos.', true);
-    }
-}
-
-function handleRegister(event) {
-    event.preventDefault();
-    const name = document.getElementById('register-name').value;
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
-    const confirmPassword = document.getElementById('register-confirm-password').value;
-
-    // IDEALMENTE: Aqui você faria um fetch(API_URL + '/auth/register', { method: 'POST', body: ... })
-    if (!name || !email || !password || !confirmPassword) {
-        showMessage('Por favor, preencha todos os campos.', true);
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        showMessage('As senhas não coincidem.', true);
-        return;
-    }
-    
-    // Simulação de cadastro bem-sucedido
-    showMessage(`Cadastro de ${name} realizado com sucesso! Faça login para continuar. (TODO: Implementar API)`);
-    navigateTo('login');
-    document.getElementById('register-form').reset();
-}
-
-
-// =========================================================================
-// FUNÇÕES DE INTERFACE (MANTIDAS)
-// =========================================================================
 
 function navigateTo(pageId) {
     document.querySelectorAll('.page').forEach(page => {
@@ -92,22 +58,35 @@ function navigateTo(pageId) {
 
 function showMessage(text, isError = false) {
     const box = document.getElementById('message-box');
+    
+    const baseClasses = 'fixed top-20 right-4 p-4 rounded-lg shadow-xl transition-opacity duration-300 opacity-0 z-50';
+    const successClasses = 'bg-dark-green text-white';
+    const errorClasses = 'bg-red-600 text-white';
+    
     box.textContent = text;
-    box.className = isError 
-        ? 'fixed top-20 right-4 p-4 rounded-lg shadow-xl bg-red-600 text-white transition-opacity duration-300 opacity-0 z-50' 
-        : 'fixed top-20 right-4 p-4 rounded-lg shadow-xl bg-dark-green text-white transition-opacity duration-300 opacity-0 z-50';
+    box.className = `${baseClasses} ${isError ? errorClasses : successClasses}`;
     
     box.classList.remove('hidden');
-    setTimeout(() => { box.classList.remove('opacity-0'); }, 10);
+    void box.offsetWidth; 
+    
+    box.classList.remove('opacity-0');
+    
     setTimeout(() => { box.classList.add('opacity-0'); }, 3000);
     setTimeout(() => { box.classList.add('hidden'); }, 3500);
 }
 
+function updateCartCount() {
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+    }
+}
+
 function renderProductCard(product) {
-    // Código inalterado para renderizar o card
     return `
-        <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-dark-green">
-            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/22543d/68d391?text=Produto'" class="w-full h-48 object-cover">
+        <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/22543d/68d391?text=${product.category}'" class="w-full h-48 object-cover">
             <div class="p-4">
                 <h3 class="text-lg font-semibold text-dark-green">${product.name}</h3>
                 <p class="text-sm text-gray-500 mb-2">${product.category}</p>
@@ -120,17 +99,22 @@ function renderProductCard(product) {
     `;
 }
 
-// MODIFICADA: Agora é assíncrona para esperar o fetchProducts
 async function renderRecommendedProducts() {
-    const productsList = await fetchProducts(); // Espera os produtos do backend
+    const apiProductsList = await fetchProducts();
     const container = document.getElementById('recommended-products-grid');
-    container.innerHTML = productsList.map(renderProductCard).join('');
-    lucide.createIcons();
+    
+    if (apiProductsList.length > 0) {
+        const apiHtml = apiProductsList.map(renderProductCard).join('');
+        container.insertAdjacentHTML('beforeend', apiHtml);
+    }
+    
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+    }
 }
 
 function addToCart(productId) {
-    // Agora busca o produto na lista 'products' carregada do backend
-    const product = products.find(p => p.id === productId); 
+    const product = products.find(p => p.id === productId); 
     if (product) {
         const existingItem = cart.find(item => item.id === productId);
         if (existingItem) {
@@ -138,21 +122,49 @@ function addToCart(productId) {
         } else {
             cart.push({ ...product, quantity: 1 });
         }
+        saveCart(); 
         updateCartCount();
         showMessage(`"${product.name}" adicionado ao carrinho!`);
+    } else {
+        showMessage(`Erro: Produto ID ${productId} não encontrado.`, true);
     }
 }
 
-function updateCartCount() {
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cart-count').textContent = count;
+function updateQuantity(productId, delta) {
+    const itemIndex = cart.findIndex(item => item.id === productId);
+    if (itemIndex > -1) {
+        const item = cart[itemIndex];
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+            cart.splice(itemIndex, 1);
+            showMessage(`"${item.name}" removido do carrinho.`, true);
+        } else {
+            showMessage(`Quantidade de "${item.name}" atualizada.`);
+        }
+        
+        saveCart(); 
+        renderCart();
+        updateCartCount();
+    }
+}
+
+function removeFromCart(productId) {
+    const itemIndex = cart.findIndex(item => item.id === productId);
+    if (itemIndex > -1) {
+        const itemName = cart[itemIndex].name;
+        cart.splice(itemIndex, 1);
+        
+        saveCart(); 
+        renderCart();
+        updateCartCount();
+        showMessage(`"${itemName}" removido do carrinho.`, true);
+    }
 }
 
 function renderCartItem(item) {
     const subtotal = item.price * item.quantity;
-    // Código inalterado
     return `
-        <div class="flex items-center bg-gray-50 p-4 rounded-xl shadow-md border-l-4 border-light-green">
+        <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md border-l-4 border-light-green mb-4">
             <div class="flex-grow">
                 <h4 class="text-lg font-semibold text-dark-green">${item.name}</h4>
                 <p class="text-sm text-gray-500">Preço unitário: R$ ${item.price.toFixed(2).replace('.', ',')}</p>
@@ -188,57 +200,120 @@ function renderCart() {
     
     container.innerHTML = cart.map(renderCartItem).join('');
     totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    lucide.createIcons();
-}
-
-function updateQuantity(productId, delta) {
-    const itemIndex = cart.findIndex(item => item.id === productId);
-    if (itemIndex > -1) {
-        const item = cart[itemIndex];
-        item.quantity += delta;
-        if (item.quantity <= 0) {
-            cart.splice(itemIndex, 1);
-        }
-        renderCart();
-        updateCartCount();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
     }
 }
 
-function removeFromCart(productId) {
-    const itemIndex = cart.findIndex(item => item.id === productId);
-    if (itemIndex > -1) {
-        const itemName = cart[itemIndex].name;
-        cart.splice(itemIndex, 1);
-        renderCart();
-        updateCartCount();
-        showMessage(`"${itemName}" removido do carrinho.`, true);
-    }
-}
-
-function checkout() {
+async function checkout() {
     if (cart.length === 0) {
-        showMessage('O carrinho está vazio. Adicione produtos antes de finalizar.', true);
+        showMessage('O carrinho está vazio. Adicione produtos antes de fechar o pedido.', true);
         return;
     }
-    // IDEALMENTE: Aqui você faria um fetch(API_URL + '/orders', { method: 'POST', body: JSON.stringify(cart) })
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    cart.length = 0;
-    renderCart();
-    updateCartCount();
-    showMessage('Compra finalizada com sucesso! (TODO: Enviar pedido para API)');
+    const orderData = {
+        items: cart.map(item => ({ id: item.id, quantity: item.quantity, price: item.price })),
+        total: total,
+    };
+
+    try {
+        const response = await fetch(`${API_URL}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao finalizar o pedido. Tente novamente.');
+        }
+
+        cart.length = 0;
+        saveCart(); 
+        
+        renderCart();
+        updateCartCount();
+        showMessage('Pedido feito com sucesso! Seu pedido foi enviado para processamento.');
+
+    } catch (error) {
+        console.error('Erro no checkout:', error);
+        showMessage(`Erro ao finalizar pedido: ${error.message}`, true);
+    }
 }
 
-// =========================================================================
-// INICIALIZAÇÃO DA APLICAÇÃO
-// =========================================================================
+function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    if (!email || !password) {
+        showMessage('Por favor, preencha todos os campos.', true);
+        return;
+    }
+
+    if (email && password) {
+        showMessage('Login simulado realizado com sucesso! (Aguardando implementação da API)', false);
+        navigateTo('home');
+        document.getElementById('login-form').reset();
+    }
+}
+
+async function handleRegister(event) {
+    event.preventDefault();
+    const name = document.getElementById('register-name').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('register-confirm-password').value;
+
+    if (!name || !email || !password || !confirmPassword) {
+        showMessage('Por favor, preencha todos os campos.', true);
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        showMessage('As senhas não coincidem.', true);
+        return;
+    }
+
+    const userData = { name, email, password };
+    
+    try {
+        const response = await fetch(`${API_URL}/auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showMessage(`Cadastro de ${name} realizado com sucesso! Faça login para continuar.`, false);
+            navigateTo('login');
+            document.getElementById('register-form').reset();
+        } else {
+            throw new Error(data.message || 'Falha no registro. Tente novamente.');
+        }
+
+    } catch (error) {
+        console.error('Erro no registro:', error);
+        showMessage(`Erro ao tentar registrar: ${error.message}`, true);
+    }
+}
 
 window.onload = function() {
-    renderRecommendedProducts(); // Chama a função que busca e renderiza do backend
+    renderRecommendedProducts();
     updateCartCount();
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+    }
 };
 
-// Exportando as funções
 window.navigateTo = navigateTo;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;

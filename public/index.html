@@ -9,7 +9,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css"/>
-<script src="script.js"> </script>
+    <script src="script.js"> </script>
 </head>
 <body>
 
@@ -39,52 +39,83 @@
     <main id="home" class="page max-w-7xl mx-auto p-4 md:p-8 space-y-12">
 
         <section>
-            <h2 class="text-2xl font-bold mb-4 text-dark-green border-b-2 border-light-green pb-2">Nossas Seções por Espécie</h2>
+            <h2 class="text-2xl font-bold mb-4 text-dark-green border-b-2 border-light-green pb-2">Seção por espécie</h2>
             <div class="scroll-container flex space-x-6 overflow-x-auto p-4 -m-4">
                 
                 <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
                     <i data-lucide="cat" class="text-dark-green w-12 h-12 mb-3"></i>
                     <h3 class="text-xl font-semibold text-dark-green">Gatos</h3>
-                    <p class="text-sm text-gray-600 mt-2">Tudo para seu felino!</p>
                 </div>
 
                 <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
                     <i data-lucide="dog" class="text-dark-green w-12 h-12 mb-3"></i>
                     <h3 class="text-xl font-semibold text-dark-green">Cachorros</h3>
-                    <p class="text-sm text-gray-600 mt-2">Rações e brinquedos!</p>
                 </div>
 
                 <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
                     <i data-lucide="fish" class="text-dark-green w-12 h-12 mb-3"></i>
                     <h3 class="text-xl font-semibold text-dark-green">Peixes</h3>
-                    <p class="text-sm text-gray-600 mt-2">Aquários e acessórios!</p>
                 </div>
 
                 <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
                     <i data-lucide="bird" class="text-dark-green w-12 h-12 mb-3"></i>
                     <h3 class="text-xl font-semibold text-dark-green">Pássaros</h3>
-                    <p class="text-sm text-gray-600 mt-2">Gaiolas e sementes!</p>
                 </div>
 
                 <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
                     <i data-lucide="rabbit" class="text-dark-green w-12 h-12 mb-3"></i>
                     <h3 class="text-xl font-semibold text-dark-green">Roedores</h3>
-                    <p class="text-sm text-gray-600 mt-2">Toca e alfafa!</p>
                 </div>
 
             </div>
         </section>
 
         <section>
-            <h2 class="text-2xl font-bold mb-6 text-dark-green border-b-2 border-light-green pb-2">Produtos Recomendados</h2>
+            <h2 class="text-2xl font-bold mb-6 text-dark-green border-b-2 border-light-green pb-2">Produtos mais buscados</h2>
             <div id="recommended-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                
+                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+                    <img src="https://placehold.co/400x300/22543d/68d391?text=Racao" alt="Ração Premium" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-dark-green"> Zoetis Apoquel </h3>
+                        <p class="text-sm text-gray-500 mb-2">Alimento completo e balanceado</p>
+                        <p class="text-2xl font-bold text-light-green mb-3">160.54</p>
+                        <button onclick="addToCart(901)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+                    <img src="https://placehold.co/400x300/68d391/22543d?text=Arranhador" alt="Arranhador Gato" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-dark-green">Arranhador para Gatos</h3>
+                        <p class="text-sm text-gray-500 mb-2">Poste de sisal e plataforma</p>
+                        <p class="text-2xl font-bold text-light-green mb-3">R$ 75,00</p>
+                         <button onclick="addToCart(902)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+                    <img src="https://placehold.co/400x300/1e3a24/68d391?text=Petisco" alt="Petiscos Naturais" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-dark-green">Petiscos Naturais (100g)</h3>
+                        <p class="text-sm text-gray-500 mb-2">Livre de conservantes</p>
+                        <p class="text-2xl font-bold text-light-green mb-3">R$ 29,99</p>
+                        <button onclick="addToCart(903)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+                
                 </div>
         </section>
-
-    </main>
+        </main>
 
     <div id="login" class="page hidden max-w-md mx-auto p-4 md:p-8">
-        <h2 class="text-3xl font-bold text-center text-dark-green mb-8">Acesso do Cliente</h2>
+        <h2 class="text-3xl font-bold text-center text-dark-green mb-8">Área de Login</h2>
         <div class="bg-white p-6 rounded-xl shadow-2xl border border-light-green">
             <form id="login-form" onsubmit="handleLogin(event)">
                 <div class="mb-4">
@@ -129,27 +160,27 @@
                     Cadastrar
                 </button>
             </form>
-            <p class="text-center text-sm text-gray-500 mt-4">Já tem conta? <a href="#" onclick="event.preventDefault(); navigateTo('login')" class="text-dark-green hover:underline">Fazer Login</a></p>
+            <p class="text-center text-sm text-gray-500 mt-4">Já possui conta? <a href="#" onclick="event.preventDefault(); navigateTo('login')" class="text-dark-green hover:underline">Faça Login</a></p>
         </div>
     </div>
 
     <hr>
 
     <div id="cart" class="page hidden max-w-4xl mx-auto p-4 md:p-8">
-        <h2 class="text-3xl font-bold text-dark-green mb-6 border-b-2 border-light-green pb-2">Seu Carrinho de Compras</h2>
+        <h2 class="text-3xl font-bold text-dark-green mb-6 border-b-2 border-light-green pb-2">Carrinho de compras</h2>
         <div id="cart-items-container" class="space-y-4">
             </div>
         <div id="cart-summary" class="mt-8 pt-4 border-t-2 border-dark-green flex justify-between items-center">
             <h3 class="text-xl font-bold text-dark-green">Total: <span id="cart-total" class="text-2xl text-light-green">R$ 0,00</span></h3>
             <button onclick="checkout()" class="bg-light-green text-dark-green font-bold py-3 px-8 rounded-lg hover:bg-green-300 transition duration-300 shadow-lg">
-                Finalizar Compra
+                Fechar pedido
             </button>
         </div>
         <div id="message-box" class="fixed top-20 right-4 p-4 rounded-lg shadow-xl text-white hidden transition-opacity duration-300 opacity-0 z-50"></div>
     </div>
 
     <footer class="bg-dark-green text-white text-center p-4 mt-12 text-sm">
-        <p>&copy; 2025 Time Pet - Feito por um Aluno Dedicado</p>
+        <p>&copy; 2025 Time Pet - Todos os direitos reservados</p>
     </footer>
 
 </div>
