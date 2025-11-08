@@ -4,32 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time Pet</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    // Configura a paleta de cores personalizada
+                    colors: {
+                        'dark-green': '#22543d', // Verde Escuro
+                        'light-green': '#68d391', // Verde de Destaque
+                    },
+                    // Configura a fonte primária (sans-serif) para ser a Sora
+                    fontFamily: {
+                        sans: ['Sora', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css"/>
     <script src="script.js"> </script>
 </head>
-<body>
-
-<div id="app">
+<body class="font-sans"> <div id="app">
 
     <header class="bg-dark-green text-white p-4 shadow-lg sticky top-0 z-50 h-16 relative">
         <div class="max-w-7xl mx-auto flex items-center justify-between h-full">
             
-            <button onclick="navigateTo('cart')" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-1 p-2 rounded-lg z-10">
+            <button onclick="navigateTo('cart')" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-1 p-2 rounded-lg">
                 <i data-lucide="shopping-cart" class="text-light-green w-6 h-6"></i>
                 <span id="cart-count" class="bg-red-500 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
             </button>
             
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <h1 onclick="navigateTo('home')" class="cursor-pointer">
-                    <img src="logo.png" alt="Logo Time Pet" class="w-28 h-28 object-contain">
+                    <img src="logo.png" alt="Logo Time Pet" class="w-20 h-20 object-contain md:w-24 md:h-24">
                 </h1>
             </div>
             
-            <button onclick="navigateTo('login')" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-2 p-2 rounded-lg z-10">
+            <button onclick="navigateTo('login')" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-2 p-2 rounded-lg">
                 <span class="hidden sm:inline">Entrar</span>
                 <i data-lucide="user-circle" class="text-light-green w-6 h-6"></i>
             </button>
@@ -42,29 +60,44 @@
             <h2 class="text-2xl font-bold mb-4 text-dark-green border-b-2 border-light-green pb-2">Seção por espécie</h2>
             <div class="scroll-container flex space-x-6 overflow-x-auto p-4 -m-4">
                 
-                <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
-                    <i data-lucide="cat" class="text-dark-green w-12 h-12 mb-3"></i>
-                    <h3 class="text-xl font-semibold text-dark-green">Gatos</h3>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1543852786-1cf662426c71?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white">
+                        <i data-lucide="cat" class="w-12 h-12 mb-3"></i>
+                        <h3 class="text-xl font-semibold">Gatos</h3>
+                    </div>
                 </div>
 
-                <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
-                    <i data-lucide="dog" class="text-dark-green w-12 h-12 mb-3"></i>
-                    <h3 class="text-xl font-semibold text-dark-green">Cachorros</h3>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1544736637-29367f338d94?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white">
+                        <i data-lucide="dog" class="w-12 h-12 mb-3"></i>
+                        <h3 class="text-xl font-semibold">Cachorros</h3>
+                    </div>
                 </div>
 
-                <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
-                    <i data-lucide="fish" class="text-dark-green w-12 h-12 mb-3"></i>
-                    <h3 class="text-xl font-semibold text-dark-green">Peixes</h3>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1522069169874-4b553d41829e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white">
+                        <i data-lucide="fish" class="w-12 h-12 mb-3"></i>
+                        <h3 class="text-xl font-semibold">Peixes</h3>
+                    </div>
                 </div>
 
-                <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
-                    <i data-lucide="bird" class="text-dark-green w-12 h-12 mb-3"></i>
-                    <h3 class="text-xl font-semibold text-dark-green">Pássaros</h3>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1596854133464-96459341499b?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white">
+                        <i data-lucide="bird" class="w-12 h-12 mb-3"></i>
+                        <h3 class="text-xl font-semibold">Pássaros</h3>
+                    </div>
                 </div>
 
-                <div class="species-card flex-none w-64 h-80 bg-white rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center">
-                    <i data-lucide="rabbit" class="text-dark-green w-12 h-12 mb-3"></i>
-                    <h3 class="text-xl font-semibold text-dark-green">Roedores</h3>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-center bg-[url('https://images.unsplash.com/photo-1582234002773-fae37ac223a5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white">
+                        <i data-lucide="rabbit" class="w-12 h-12 mb-3"></i>
+                        <h3 class="text-xl font-semibold">Roedores</h3>
+                    </div>
                 </div>
 
             </div>
@@ -79,7 +112,10 @@
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-dark-green"> Zoetis Apoquel </h3>
                         <p class="text-sm text-gray-500 mb-2">Alimento completo e balanceado</p>
-                        <p class="text-2xl font-bold text-light-green mb-3">160.54</p>
+                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
+                            <span class="text-sm font-semibold mr-1">R$</span>
+                            160,54
+                        </p>
                         <button onclick="addToCart(901)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
                         </button>
@@ -91,7 +127,10 @@
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-dark-green">Arranhador para Gatos</h3>
                         <p class="text-sm text-gray-500 mb-2">Poste de sisal e plataforma</p>
-                        <p class="text-2xl font-bold text-light-green mb-3">R$ 75,00</p>
+                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
+                            <span class="text-sm font-semibold mr-1">R$</span>
+                            75,00
+                        </p>
                          <button onclick="addToCart(902)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
                         </button>
@@ -103,7 +142,10 @@
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-dark-green">Petiscos Naturais (100g)</h3>
                         <p class="text-sm text-gray-500 mb-2">Livre de conservantes</p>
-                        <p class="text-2xl font-bold text-light-green mb-3">R$ 29,99</p>
+                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
+                            <span class="text-sm font-semibold mr-1">R$</span>
+                            29,99
+                        </p>
                         <button onclick="addToCart(903)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
                         </button>
