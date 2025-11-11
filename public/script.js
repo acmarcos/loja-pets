@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3000/api';
+// Removida a variável const API_URL = 'http://localhost:3000/api';
+// Agora, todas as chamadas usam caminhos relativos (ex: /api/login), ideais para Vercel.
 
 const STATIC_PRODUCTS = [
     { id: 901, name: "Zoetis Apoquel", price: 160.54, image: "https://rbldistribuidora.agilecdn.com.br/74303.jpg?v=495-2049421201", category: "Medicamentos" },
@@ -7,16 +8,16 @@ const STATIC_PRODUCTS = [
 ];
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let products = [...STATIC_PRODUCTS]; 
-
+let products = [...STATIC_PRODUCTS]; 
 
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// ⚠️ ATENÇÃO: Se você criar uma Serverless Function em /api/products, ela será chamada aqui.
 async function fetchProducts() {
     try {
-        const response = await fetch(`${API_URL}/products`);
+        const response = await fetch('/api/products'); // USANDO CAMINHO RELATIVO
         
         if (!response.ok) {
             throw new Error(`Erro ao buscar produtos. Status: ${response.status}`);
@@ -38,9 +39,9 @@ async function fetchProducts() {
 
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
-        showMessage('Não foi possível carregar produtos da API. Exibindo apenas itens estáticos.', true); 
+        showMessage('Não foi possível carregar produtos da API. Exibindo apenas itens estáticos.', true); 
         
-        products = STATIC_PRODUCTS; 
+        products = STATIC_PRODUCTS; 
         return []; 
     }
 }
@@ -67,7 +68,7 @@ function showMessage(text, isError = false) {
     box.className = `${baseClasses} ${isError ? errorClasses : successClasses}`;
     
     box.classList.remove('hidden');
-    void box.offsetWidth; 
+    void box.offsetWidth; 
     
     box.classList.remove('opacity-0');
     
@@ -114,7 +115,7 @@ async function renderRecommendedProducts() {
 }
 
 function addToCart(productId) {
-    const product = products.find(p => p.id === productId); 
+    const product = products.find(p => p.id === productId); 
     if (product) {
         const existingItem = cart.find(item => item.id === productId);
         if (existingItem) {
@@ -122,7 +123,7 @@ function addToCart(productId) {
         } else {
             cart.push({ ...product, quantity: 1 });
         }
-        saveCart(); 
+        saveCart(); 
         updateCartCount();
         showMessage(`"${product.name}" adicionado ao carrinho!`);
     } else {
@@ -142,7 +143,7 @@ function updateQuantity(productId, delta) {
             showMessage(`Quantidade de "${item.name}" atualizada.`);
         }
         
-        saveCart(); 
+        saveCart(); 
         renderCart();
         updateCartCount();
     }
@@ -154,7 +155,7 @@ function removeFromCart(productId) {
         const itemName = cart[itemIndex].name;
         cart.splice(itemIndex, 1);
         
-        saveCart(); 
+        saveCart(); 
         renderCart();
         updateCartCount();
         showMessage(`"${itemName}" removido do carrinho.`, true);
@@ -219,7 +220,7 @@ async function checkout() {
     };
 
     try {
-        const response = await fetch(`${API_URL}/orders`, {
+        const response = await fetch('/api/orders', { // USANDO CAMINHO RELATIVO
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -233,7 +234,7 @@ async function checkout() {
         }
 
         cart.length = 0;
-        saveCart(); 
+        saveCart(); 
         
         renderCart();
         updateCartCount();
@@ -245,8 +246,12 @@ async function checkout() {
     }
 }
 
-function handleLogin(event) {
+// =========================================================
+// FUNÇÃO DE LOGIN (Conexão Real com /api/login)
+// =========================================================
+async function handleLogin(event) {
     event.preventDefault();
+    
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     
@@ -255,13 +260,39 @@ function handleLogin(event) {
         return;
     }
 
-    if (email && password) {
-        showMessage('Login simulado realizado com sucesso! (Aguardando implementação da API)', false);
-        navigateTo('home');
-        document.getElementById('login-form').reset();
+    try {
+        // CHAMA SUA SERVERLESS FUNCTION (api/login.js)
+        const response = await fetch('/api/login', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) { // Verifica o status 200 E a flag de sucesso do seu backend
+            showMessage(data.message || 'Login realizado com sucesso!', false);
+            document.getElementById('login-form').reset();
+            
+            // Aqui é onde você SALVARIA o token de autenticação, se o backend o fornecesse.
+            
+            navigateTo('home'); // Redireciona para a home
+        } else {
+            // Mostra a mensagem de erro que veio do backend (ex: Credenciais inválidas)
+            showMessage(data.message || 'Falha no login. Tente novamente.', true);
+        }
+
+    } catch (error) {
+        console.error('Erro de rede ou servidor:', error);
+        showMessage('Erro ao conectar com o servidor. Verifique sua conexão.', true);
     }
 }
 
+// =========================================================
+// FUNÇÃO DE CADASTRO (Ajustada para /api/register)
+// =========================================================
 async function handleRegister(event) {
     event.preventDefault();
     const name = document.getElementById('register-name').value;
@@ -282,7 +313,8 @@ async function handleRegister(event) {
     const userData = { name, email, password };
     
     try {
-        const response = await fetch(`${API_URL}/auth/register`, {
+        // CHAMA SUA FUTURA SERVERLESS FUNCTION DE CADASTRO (api/register.js)
+        const response = await fetch('/api/register', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
