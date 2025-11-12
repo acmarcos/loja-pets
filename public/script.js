@@ -338,6 +338,66 @@ async function handleRegister(event) {
     }
 }
 
+// =========================================================
+// FUNÇÃO DE EXCLUSÃO DE CONTA (NOVA FUNÇÃO)
+// =========================================================
+async function handleDeleteAccount() {
+    // 1. Coleta os dados do formulário de exclusão
+    const email = document.getElementById('deleteEmail').value;
+    const password = document.getElementById('deletePassword').value;
+
+    if (!email || !password) {
+        showMessage("Por favor, preencha o email e a senha para confirmar.", true);
+        return;
+    }
+
+    // 2. Confirmação de segurança adicional
+    if (!confirm('Tem certeza que deseja excluir sua conta? Esta ação é IRREVERSÍVEL!')) {
+        return;
+    }
+
+    try {
+        // CHAMA SUA SERVERLESS FUNCTION (api/delete-account.js)
+        const response = await fetch('/api/delete-account', {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        // 3. Trata a resposta da API (Backend deve retornar 200 para sucesso e 401 para senha inválida)
+        if (response.ok && data.success) { 
+            // Exclusão bem-sucedida
+            showMessage(data.message || 'Conta excluída com sucesso.', false);
+            
+            // Limpa o estado
+            localStorage.clear();
+            cart.length = 0;
+            updateCartCount();
+
+            // Redireciona para o login
+            navigateTo('login');
+            
+        } else if (response.status === 401) {
+            // Senha incorreta (API está funcionando, mas a autenticação falhou)
+            showMessage(data.message || 'Senha incorreta. Não foi possível confirmar a exclusão.', true);
+        
+        } else {
+            // Erro de lógica do backend ou 500
+            showMessage(data.message || 'Falha na exclusão da conta. Tente novamente.', true);
+        }
+
+    } catch (error) {
+        console.error('Erro de rede ou servidor na exclusão:', error);
+        // Este erro é o que você vê se a Serverless Function falha devido a 'Cannot find module'
+        showMessage('Erro grave ao conectar com o servidor. Verifique o console do Vercel.', true);
+    }
+}
+
+
 window.onload = function() {
     renderRecommendedProducts();
     updateCartCount();
@@ -349,6 +409,7 @@ window.onload = function() {
 window.navigateTo = navigateTo;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
+window.handleDeleteAccount = handleDeleteAccount; // <-- AGORA EXPOSTA AO HTML
 window.addToCart = addToCart;
 window.updateQuantity = updateQuantity;
 window.removeFromCart = removeFromCart;
