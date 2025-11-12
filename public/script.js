@@ -1,7 +1,7 @@
 const STATIC_PRODUCTS = [
-    { id: 901, name: "Zoetis Apoquel", price: 160.54, image: "https://rbldistribuidora.agilecdn.com.br/74303.jpg?v=495-2049421201", category: "Medicamentos" },
-    { id: 902, name: "Arranhador para Gatos", price: 75.00, image: "https://placehold.co/400x300/68d391/22543d?text=Arranhador", category: "Acessórios" },
-    { id: 903, name: "Petiscos Naturais (100g)", price: 29.99, image: "https://placehold.co/400x300/1e3a24/68d391?text=Petisco", category: "Alimentos" },
+    { id: 901, name: "Zoetis Apoquel Oclacitinib 16mg - Comprimidos para Dermatite Atópica", price: 160.54, image: "https://images.tcdn.com.br/img/img_prod/808976/apoquel_3_6mg_comprimido_59_1_05675156215cce4d04fe4dacafa76344.png", category: "Medicamentos" },
+    { id: 902, name: "Arranhador Adesivo Premium Para Gatos- Sofá Cama Box 50x50cm (CHUMBO)", price: 29.99, image: "https://m.media-amazon.com/images/I/71+2zi9nlcL._AC_UF1000,1000_QL80_FMwebp_.jpg", category: "Acessórios" },
+    { id: 903, name: "Nutricon Nutriflakes® 500Gr Para Todos Os Tipos De Peixe Adulto", price: 78.99, image: "https://m.media-amazon.com/images/I/71lz5qpXXgL._AC_UF1000,1000_QL80_FMwebp_.jpg", category: "Alimentos" },
 ];
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -61,12 +61,14 @@ function navigateTo(pageId) {
     window.scrollTo(0, 0);
 }
 
+// CORRIGIDO: Usando primary-dark e soft-white
 function showMessage(text, isError = false) {
     const box = document.getElementById('message-box');
     
+    // Corrigido: Usando primary-dark e soft-white
     const baseClasses = 'fixed top-20 right-4 p-4 rounded-lg shadow-xl transition-opacity duration-300 opacity-0 z-50';
-    const successClasses = 'bg-dark-green text-white';
-    const errorClasses = 'bg-red-600 text-white';
+    const successClasses = 'bg-primary-dark text-soft-white'; // Cor principal para sucesso
+    const errorClasses = 'bg-red-600 text-soft-white'; // Mantendo o vermelho para erro
     
     box.textContent = text;
     box.className = `${baseClasses} ${isError ? errorClasses : successClasses}`;
@@ -88,7 +90,7 @@ function updateCartCount() {
     }
 }
 
-// NOVA FUNÇÃO: Atualiza a barra de navegação com o estado do usuário
+// CORRIGIDO: Usando soft-white, primary-medium e primary-dark
 function updateLoginUI() {
     const loginButton = document.getElementById('login-link'); 
     const userDisplay = document.getElementById('user-display'); 
@@ -98,16 +100,16 @@ function updateLoginUI() {
         if (loginButton) loginButton.classList.add('hidden');
         if (userDisplay) {
             userDisplay.classList.remove('hidden');
-            // Adicionado um menu de dropdown simples ou um link para Logout
+            // Corrigido: text-soft-white, hover:text-primary-medium e text-primary-dark
             userDisplay.innerHTML = `
                 <div class="relative group">
-                    <div class="flex items-center cursor-pointer text-white hover:text-light-green transition duration-300">
+                    <div class="flex items-center cursor-pointer text-soft-white hover:text-primary-medium transition duration-300">
                         <i data-lucide="user-check" class="w-5 h-5 mr-1"></i>
                         <span class="font-semibold">${currentUser.name || 'Usuário'}</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
                     </div>
-                    <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl hidden group-hover:block z-50">
-                        <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-sm text-dark-green hover:bg-red-100">
+                    <div class="absolute right-0 mt-2 w-48 bg-soft-white border border-gray-200 rounded-lg shadow-xl hidden group-hover:block z-50">
+                        <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-sm text-primary-dark hover:bg-red-100">
                             <i data-lucide="log-out" class="w-4 h-4 mr-2 inline-block"></i> Logout
                         </a>
                     </div>
@@ -124,19 +126,24 @@ function updateLoginUI() {
         if (userDisplay) userDisplay.classList.add('hidden');
     }
 }
-// FIM NOVA FUNÇÃO
 
+// CORRIGIDO: Usando soft-white, primary-dark e primary-medium E FLEXBOX para alinhamento
 function renderProductCard(product) {
     return `
-        <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
-            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/22543d/68d391?text=${product.category}'" class="w-full h-48 object-cover">
-            <div class="p-4">
-                <h3 class="text-lg font-semibold text-dark-green">${product.name}</h3>
-                <p class="text-sm text-gray-500 mb-2">${product.category}</p>
-                <p class="text-2xl font-bold text-light-green mb-3">R$ ${product.price.toFixed(2).replace('.', ',')}</p>
-                <button onclick="addToCart(${product.id})" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
-                    <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
-                </button>
+        <div class="product-card bg-soft-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-primary-dark flex flex-col h-full">
+            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/400x300/5D737E/FCFFFD?text=${product.category}'" class="w-full h-48 object-cover">
+            
+            <div class="p-4 flex flex-col flex-grow justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-primary-dark">${product.name}</h3>
+                    <p class="text-sm text-gray-500 mb-2">${product.category}</p>
+                </div>
+                
+                <div class="mt-auto"> <p class="text-2xl font-bold text-primary-medium mb-3">R$ ${product.price.toFixed(2).replace('.', ',')}</p>
+                    <button onclick="addToCart(${product.id})" class="w-full bg-primary-medium text-soft-white font-bold py-2 rounded-lg hover:bg-primary-dark transition duration-300 flex items-center justify-center">
+                        <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -146,9 +153,12 @@ async function renderRecommendedProducts() {
     const apiProductsList = await fetchProducts();
     const container = document.getElementById('recommended-products-grid');
     
-    if (apiProductsList.length > 0) {
-        const apiHtml = apiProductsList.map(renderProductCard).join('');
-        container.insertAdjacentHTML('beforeend', apiHtml);
+    // Limpar o container antes de adicionar, caso ele tenha conteúdo
+    container.innerHTML = ''; 
+    
+    if (products.length > 0) {
+        const html = products.map(renderProductCard).join('');
+        container.insertAdjacentHTML('beforeend', html);
     }
     
     if (typeof lucide !== 'undefined' && lucide.createIcons) {
@@ -204,22 +214,23 @@ function removeFromCart(productId) {
     }
 }
 
+// CORRIGIDO: Usando soft-white, primary-dark e primary-medium
 function renderCartItem(item) {
     const subtotal = item.price * item.quantity;
     return `
-        <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl shadow-md border-l-4 border-light-green mb-4">
+        <div class="flex items-center justify-between bg-soft-white p-4 rounded-xl shadow-md border-l-4 border-primary-medium mb-4">
             <div class="flex-grow">
-                <h4 class="text-lg font-semibold text-dark-green">${item.name}</h4>
+                <h4 class="text-lg font-semibold text-primary-dark">${item.name}</h4>
                 <p class="text-sm text-gray-500">Preço unitário: R$ ${item.price.toFixed(2).replace('.', ',')}</p>
-                <p class="text-md font-bold mt-1">Subtotal: <span class="text-light-green">R$ ${subtotal.toFixed(2).replace('.', ',')}</span></p>
+                <p class="text-md font-bold mt-1">Subtotal: <span class="text-primary-medium">R$ ${subtotal.toFixed(2).replace('.', ',')}</span></p>
             </div>
             <div class="flex items-center space-x-3">
                 <button onclick="updateQuantity(${item.id}, -1)" class="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-200">
-                    <i data-lucide="minus" class="w-4 h-4 text-dark-green"></i>
+                    <i data-lucide="minus" class="w-4 h-4 text-primary-dark"></i>
                 </button>
                 <span class="text-lg font-bold w-6 text-center">${item.quantity}</span>
-                <button onclick="updateQuantity(${item.id}, 1)" class="p-2 bg-light-green rounded-full hover:bg-green-400 transition duration-200">
-                    <i data-lucide="plus" class="w-4 h-4 text-dark-green"></i>
+                <button onclick="updateQuantity(${item.id}, 1)" class="p-2 bg-primary-medium rounded-full hover:bg-primary-dark transition duration-200">
+                    <i data-lucide="plus" class="w-4 h-4 text-soft-white"></i>
                 </button>
                 <button onclick="removeFromCart(${item.id})" class="p-2 bg-red-100 rounded-full hover:bg-red-200 transition duration-200 ml-4">
                     <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
@@ -447,7 +458,8 @@ async function handleDeleteAccount() {
 
 
 window.onload = function() {
-    renderRecommendedProducts();
+    // Corrigido para usar a lista global 'products' que inclui estáticos e API
+    renderRecommendedProducts(); 
     updateCartCount();
     updateLoginUI(); // ESSENCIAL: Carrega o estado de login ao iniciar
     if (typeof lucide !== 'undefined' && lucide.createIcons) {
