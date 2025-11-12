@@ -1,10 +1,13 @@
 {
   "name": "loja-pets",
   "version": "1.0.0",
-  // ... outras configurações
+  "description": "E-commerce de Pet Shop com MongoDB e Vercel",
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev"
+  },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "mongodb": "^6.8.0", // VERSÃO NECESSÁRIA PARA O CLIENTE MONGO
-    // ... outras dependências
+    "mongodb": "^6.8.0"
   }
 }

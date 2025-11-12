@@ -2,21 +2,37 @@
 import { MongoClient } from 'mongodb';
 import bcrypt from 'bcrypt';
 
-// Você deve ter a variável MONGO_URI configurada no Vercel
+// URL de conexão de ambiente (deve ser configurada no Vercel como MONGO_URI)
 const uri = process.env.MONGO_URI;
-let client;
+
+// Variável global para armazenar a conexão em cache
+let cached = global.mongo; 
+
+if (!cached) {
+    cached = global.mongo = { conn: null, promise: null };
+}
 
 // Função para conectar ao MongoDB (reutiliza a conexão)
 async function connectToDatabase() {
     if (!uri) {
-        throw new Error("MONGO_URI não está configurada.");
+        throw new Error("ERRO CRÍTICO: Variável MONGO_URI não configurada no Vercel.");
     }
-    if (!client) {
-        client = new MongoClient(uri);
-        await client.connect();
+    
+    // Se já houver uma conexão ativa, retorne-a
+    if (cached.conn) {
+        return cached.conn.db('TimePet');
     }
-    // ⚠️ Database: 'TimePet'
-    return client.db('TimePet'); 
+
+    // Se não houver, crie a Promessa de conexão se ela ainda não existir
+    if (!cached.promise) {
+        cached.promise = MongoClient.connect(uri).then((client) => {
+            return client; // Retorna o cliente conectado
+        });
+    }
+
+    // Aguarde a conexão e armazene o cliente no cache
+    cached.conn = await cached.promise;
+    return cached.conn.db('TimePet'); // Retorna o database 'TimePet'
 }
 
 export default async function handler(req, res) {
@@ -25,7 +41,6 @@ export default async function handler(req, res) {
         return res.status(405).send({ message: 'Método não permitido.' });
     }
 
-    // Coleta name, email e password do corpo da requisição
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -33,8 +48,8 @@ export default async function handler(req, res) {
     }
 
     try {
+        // Tenta conectar e obter o banco de dados
         const db = await connectToDatabase();
-        // ⚠️ Coleção: 'users' (será criada se não existir)
         const usersCollection = db.collection('users');
 
         // 1. Verificar se o e-mail já existe
@@ -43,29 +58,30 @@ export default async function handler(req, res) {
             return res.status(409).json({ message: 'Este e-mail já está em uso.' });
         }
         
-        // 2. Criptografar a senha (Hashing)
-        // O número 10 é o 'saltRounds' (custo do hashing), um valor padrão seguro.
+        // 2. Criptografar a senha
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // 3. Criar o documento do novo usuário
+        // 3. Criar e inserir o novo usuário
         const newUser = {
             name: name,
             email: email,
-            password: hashedPassword, // Salva a senha CRIPTOGRAFADA
+            password: hashedPassword,
             createdAt: new Date()
         };
 
-        // 4. Inserir o novo usuário no MongoDB
         const result = await usersCollection.insertOne(newUser);
 
-        // 5. Resposta de sucesso
+        // 4. Resposta de sucesso
         return res.status(201).json({
             message: 'Usuário registrado com sucesso! Você já pode fazer login.',
             userId: result.insertedId
         });
 
     } catch (error) {
-        console.error('Erro no processamento do registro:', error);
-        return res.status(500).json({ message: 'Erro interno ao registrar usuário.' });
+        // Este é o log que você deve procurar no Vercel
+        console.error('Erro no processamento do registro ou conexão:', error); 
+        
+        // Retorna um 500 para o frontend
+        return res.status(500).json({ message: 'Erro interno ao processar o registro. Verifique os logs do servidor.' });
     }
 }
