@@ -10,12 +10,10 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    // Configura a paleta de cores personalizada
                     colors: {
-                        'dark-green': '#22543d', // Verde Escuro
-                        'light-green': '#68d391', // Verde de Destaque
+                        'dark-green': '#22543d',
+                        'light-green': '#68d391',
                     },
-                    // Configura a fonte primária (sans-serif) para ser a Sora
                     fontFamily: {
                         sans: ['Sora', 'sans-serif'],
                     }
@@ -31,7 +29,8 @@
     <link rel="stylesheet" href="style.css"/>
     <script src="script.js"> </script> 
 </head>
-<body class="font-sans"> <div id="app">
+<body class="font-sans"> 
+<div id="app">
 
     <header class="bg-dark-green text-white p-4 shadow-lg sticky top-0 z-50 h-16 relative">
         <div class="max-w-7xl mx-auto flex items-center justify-between h-full">
@@ -47,10 +46,21 @@
                 </h1>
             </div>
             
-            <button onclick="navigateTo('login')" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-2 p-2 rounded-lg">
-                <span class="hidden sm:inline">Entrar</span>
-                <i data-lucide="user-circle" class="text-light-green w-6 h-6"></i>
-            </button>
+            <div class="flex items-center space-x-2">
+                <p id="user-display-name" class="text-sm font-semibold text-light-green hidden mr-2">
+                    Olá, Usuário!
+                </p>
+                
+                <button id="login-button" onclick="navigateTo('login')" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-2 p-2 rounded-lg">
+                    <span class="hidden sm:inline">Entrar</span>
+                    <i data-lucide="user-circle" class="text-light-green w-6 h-6"></i>
+                </button>
+
+                <button id="logout-button" onclick="handleLogout()" class="text-white hover:text-red-400 transition duration-200 hidden flex items-center space-x-2 p-2 rounded-lg bg-light-green/20 rounded">
+                     <span class="hidden sm:inline">Sair</span>
+                     <i data-lucide="log-out" class="text-red-400 w-6 h-6"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -64,7 +74,7 @@
                     <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
                     <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
                         <i data-lucide="cat" class="w-8 h-8"></i>
-                        <h3 class="text-xl font-semibold">Gatos</h3>
+                        <h3 class="text-xl font-semibold">Gatos </h3>
                     </div>
                 </div>
 

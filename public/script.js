@@ -1,6 +1,3 @@
-// Removida a variável const API_URL = 'http://localhost:3000/api';
-// Agora, todas as chamadas usam caminhos relativos (ex: /api/login), ideais para Vercel.
-
 const STATIC_PRODUCTS = [
     { id: 901, name: "Zoetis Apoquel", price: 160.54, image: "https://rbldistribuidora.agilecdn.com.br/74303.jpg?v=495-2049421201", category: "Medicamentos" },
     { id: 902, name: "Arranhador para Gatos", price: 75.00, image: "https://placehold.co/400x300/68d391/22543d?text=Arranhador", category: "Acessórios" },
@@ -14,10 +11,9 @@ function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// ⚠️ ATENÇÃO: Se você criar uma Serverless Function em /api/products, ela será chamada aqui.
 async function fetchProducts() {
     try {
-        const response = await fetch('/api/products'); // USANDO CAMINHO RELATIVO
+        const response = await fetch('/api/products'); 
         
         if (!response.ok) {
             throw new Error(`Erro ao buscar produtos. Status: ${response.status}`);
@@ -220,7 +216,7 @@ async function checkout() {
     };
 
     try {
-        const response = await fetch('/api/orders', { // USANDO CAMINHO RELATIVO
+        const response = await fetch('/api/orders', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -246,9 +242,6 @@ async function checkout() {
     }
 }
 
-// =========================================================
-// FUNÇÃO DE LOGIN (Conexão Real com /api/login)
-// =========================================================
 async function handleLogin(event) {
     event.preventDefault();
     
@@ -261,7 +254,6 @@ async function handleLogin(event) {
     }
 
     try {
-        // CHAMA SUA SERVERLESS FUNCTION (api/login.js)
         const response = await fetch('/api/login', { 
             method: 'POST',
             headers: {
@@ -272,15 +264,13 @@ async function handleLogin(event) {
 
         const data = await response.json();
 
-        if (response.ok && data.success) { // Verifica o status 200 E a flag de sucesso do seu backend
+        if (response.ok && data.success) { 
             showMessage(data.message || 'Login realizado com sucesso!', false);
             document.getElementById('login-form').reset();
             
-            // Aqui é onde você SALVARIA o token de autenticação, se o backend o fornecesse.
-            
-            navigateTo('home'); // Redireciona para a home
+            navigateTo('home'); 
         } else {
-            // Mostra a mensagem de erro que veio do backend (ex: Credenciais inválidas)
+            
             showMessage(data.message || 'Falha no login. Tente novamente.', true);
         }
 
@@ -290,9 +280,6 @@ async function handleLogin(event) {
     }
 }
 
-// =========================================================
-// FUNÇÃO DE CADASTRO (Ajustada para /api/register)
-// =========================================================
 async function handleRegister(event) {
     event.preventDefault();
     const name = document.getElementById('register-name').value;
@@ -313,7 +300,6 @@ async function handleRegister(event) {
     const userData = { name, email, password };
     
     try {
-        // CHAMA SUA FUTURA SERVERLESS FUNCTION DE CADASTRO (api/register.js)
         const response = await fetch('/api/register', { 
             method: 'POST',
             headers: {
@@ -338,11 +324,8 @@ async function handleRegister(event) {
     }
 }
 
-// =========================================================
-// FUNÇÃO DE EXCLUSÃO DE CONTA (NOVA FUNÇÃO)
-// =========================================================
 async function handleDeleteAccount() {
-    // 1. Coleta os dados do formulário de exclusão
+    
     const email = document.getElementById('deleteEmail').value;
     const password = document.getElementById('deletePassword').value;
 
@@ -351,13 +334,13 @@ async function handleDeleteAccount() {
         return;
     }
 
-    // 2. Confirmação de segurança adicional
+    
     if (!confirm('Tem certeza que deseja excluir sua conta? Esta ação é IRREVERSÍVEL!')) {
         return;
     }
 
     try {
-        // CHAMA SUA SERVERLESS FUNCTION (api/delete-account.js)
+        
         const response = await fetch('/api/delete-account', {
             method: 'POST', 
             headers: {
@@ -368,31 +351,31 @@ async function handleDeleteAccount() {
 
         const data = await response.json();
 
-        // 3. Trata a resposta da API (Backend deve retornar 200 para sucesso e 401 para senha inválida)
+        
         if (response.ok && data.success) { 
-            // Exclusão bem-sucedida
+            
             showMessage(data.message || 'Conta excluída com sucesso.', false);
             
-            // Limpa o estado
+            
             localStorage.clear();
             cart.length = 0;
             updateCartCount();
 
-            // Redireciona para o login
+            
             navigateTo('login');
             
         } else if (response.status === 401) {
-            // Senha incorreta (API está funcionando, mas a autenticação falhou)
+            
             showMessage(data.message || 'Senha incorreta. Não foi possível confirmar a exclusão.', true);
         
         } else {
-            // Erro de lógica do backend ou 500
+            
             showMessage(data.message || 'Falha na exclusão da conta. Tente novamente.', true);
         }
 
     } catch (error) {
         console.error('Erro de rede ou servidor na exclusão:', error);
-        // Este erro é o que você vê se a Serverless Function falha devido a 'Cannot find module'
+        
         showMessage('Erro grave ao conectar com o servidor. Verifique o console do Vercel.', true);
     }
 }
@@ -409,7 +392,7 @@ window.onload = function() {
 window.navigateTo = navigateTo;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
-window.handleDeleteAccount = handleDeleteAccount; // <-- AGORA EXPOSTA AO HTML
+window.handleDeleteAccount = handleDeleteAccount; 
 window.addToCart = addToCart;
 window.updateQuantity = updateQuantity;
 window.removeFromCart = removeFromCart;
