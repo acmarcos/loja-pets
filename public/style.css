@@ -1,13 +1,42 @@
+/* ----------------------------------------------------------------
+   CORREÇÃO 1: IMAGEM DE FUNDO (SOLICITADA NA ÚLTIMA INTERAÇÃO)
+   ---------------------------------------------------------------- */
+body {
+    /* Define o caminho da imagem de fundo. Ajuste o caminho se necessário. */
+    background-image: url('/background.jpg'); 
+    
+    /* Garante que a imagem preencha toda a área */
+    background-size: cover; 
+    
+    /* Impede que a imagem se repita */
+    background-repeat: no-repeat; 
+    
+    /* Fixa a imagem no viewport para não rolar com o conteúdo */
+    background-attachment: fixed;
+    
+    /* Cor de fallback da sua nova paleta (#DAFFEF) caso a imagem não carregue */
+    background-color: #DAFFEF; 
+}
+
+
+/* ----------------------------------------------------------------
+   CÓDIGO EXISTENTE (Ajustes de Scrollbar e Transições)
+   ---------------------------------------------------------------- */
+
+/* Esconde a barra de rolagem em navegadores modernos */
 .scroll-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    /* Remover 'scrollbar-width: none;' aqui pois ele se aplica a Firefox e pode ser definido abaixo */
+    scrollbar-width: none; /* Propriedade para Firefox */
 }
 
+/* Esconde a barra de rolagem no Chrome, Safari e Opera */
 .scroll-container::-webkit-scrollbar {
     display: none;
 }
 
+/* Transições de Opacidade para o User Dropdown */
 #user-display {
     transition: opacity 0.3s ease-in-out;
 }
@@ -21,12 +50,14 @@
     opacity: 1;
 }
 
+/* Posicionamento do Dropdown (Deve ser usado com um wrapper posicionado) */
 .user-dropdown {
     position: absolute;
     right: 0;
     top: 100%;
 }
 
+/* Transições para a caixa de mensagens (Ex: Mensagens de sucesso/erro) */
 #message-box {
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     transform: translateY(0);
