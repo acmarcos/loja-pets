@@ -7,9 +7,17 @@ const STATIC_PRODUCTS = [
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let products = [...STATIC_PRODUCTS]; 
 
+// NOVO: Estado do usuário e funções de persistência
+let currentUser = JSON.parse(localStorage.getItem('user')) || null;
+
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
+
+function saveUserState() {
+    localStorage.setItem('user', JSON.stringify(currentUser));
+}
+// FIM NOVO
 
 async function fetchProducts() {
     try {
@@ -79,6 +87,44 @@ function updateCartCount() {
         cartCountElement.textContent = count;
     }
 }
+
+// NOVA FUNÇÃO: Atualiza a barra de navegação com o estado do usuário
+function updateLoginUI() {
+    const loginButton = document.getElementById('login-link'); 
+    const userDisplay = document.getElementById('user-display'); 
+
+    if (currentUser) {
+        // Usuário Logado
+        if (loginButton) loginButton.classList.add('hidden');
+        if (userDisplay) {
+            userDisplay.classList.remove('hidden');
+            // Adicionado um menu de dropdown simples ou um link para Logout
+            userDisplay.innerHTML = `
+                <div class="relative group">
+                    <div class="flex items-center cursor-pointer text-white hover:text-light-green transition duration-300">
+                        <i data-lucide="user-check" class="w-5 h-5 mr-1"></i>
+                        <span class="font-semibold">${currentUser.name || 'Usuário'}</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </div>
+                    <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl hidden group-hover:block z-50">
+                        <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-sm text-dark-green hover:bg-red-100">
+                            <i data-lucide="log-out" class="w-4 h-4 mr-2 inline-block"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            `;
+            // Recria os ícones do Lucide
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        }
+    } else {
+        // Usuário Deslogado
+        if (loginButton) loginButton.classList.remove('hidden');
+        if (userDisplay) userDisplay.classList.add('hidden');
+    }
+}
+// FIM NOVA FUNÇÃO
 
 function renderProductCard(product) {
     return `
@@ -268,6 +314,11 @@ async function handleLogin(event) {
             showMessage(data.message || 'Login realizado com sucesso!', false);
             document.getElementById('login-form').reset();
             
+            // ATUALIZADO: Salva o usuário no estado global e no localStorage
+            currentUser = data.user; 
+            saveUserState();
+            updateLoginUI(); 
+            
             navigateTo('home'); 
         } else {
             
@@ -279,6 +330,16 @@ async function handleLogin(event) {
         showMessage('Erro ao conectar com o servidor. Verifique sua conexão.', true);
     }
 }
+
+// NOVA FUNÇÃO: Lógica para deslogar
+function handleLogout() {
+    currentUser = null;
+    localStorage.removeItem('user');
+    showMessage('Você foi desconectado.', true);
+    updateLoginUI(); 
+    navigateTo('home');
+}
+// FIM NOVA FUNÇÃO
 
 async function handleRegister(event) {
     event.preventDefault();
@@ -360,6 +421,10 @@ async function handleDeleteAccount() {
             localStorage.clear();
             cart.length = 0;
             updateCartCount();
+            
+            // ATUALIZADO: Limpa o usuário após exclusão
+            currentUser = null;
+            updateLoginUI();
 
             
             navigateTo('login');
@@ -384,15 +449,18 @@ async function handleDeleteAccount() {
 window.onload = function() {
     renderRecommendedProducts();
     updateCartCount();
+    updateLoginUI(); // ESSENCIAL: Carrega o estado de login ao iniciar
     if (typeof lucide !== 'undefined' && lucide.createIcons) {
         lucide.createIcons();
     }
 };
 
+// EXPOSIÇÃO: Garante que todas as funções sejam acessíveis pelo HTML
 window.navigateTo = navigateTo;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
 window.handleDeleteAccount = handleDeleteAccount; 
+window.handleLogout = handleLogout; // NOVO: Exposto para o HTML
 window.addToCart = addToCart;
 window.updateQuantity = updateQuantity;
 window.removeFromCart = removeFromCart;
