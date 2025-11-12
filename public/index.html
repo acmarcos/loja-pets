@@ -1,261 +1,260 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time Pet</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'dark-green': '#22543d',
-                        'light-green': '#68d391',
-                    },
-                    fontFamily: {
-                        sans: ['Sora', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Pet</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-green': '#22543d',
+                        'light-green': '#68d391',
+                    },
+                    fontFamily: {
+                        sans: ['Sora', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css"/>
-    <script src="script.js"> </script> 
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css"/>
+    <script src="script.js"> </script> 
 </head>
-<body class="font-sans"> 
+<body class="font-sans"> 
 <div id="app">
 
-        <header class="bg-dark-green text-white p-4 shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex items-center justify-between h-full">
-            
-                        <button onclick="navigateTo('cart')" class="relative text-white hover:text-light-green transition duration-200 flex items-center space-x-1 p-2 rounded-lg">
-                <i data-lucide="shopping-cart" class="text-light-green w-6 h-6"></i>
-                <span id="cart-count" class="bg-red-500 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4">0</span>
-            </button>
+    <header class="bg-dark-green text-white p-2 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between h-full">
+            
+            <button onclick="navigateTo('cart')" class="relative text-white hover:text-light-green transition duration-200 flex items-center space-x-1 p-2 rounded-lg">
+                <i data-lucide="shopping-cart" class="text-light-green w-6 h-6"></i>
+                <span id="cart-count" class="bg-red-500 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4">0</span>
+            </button>
 
-                        <div onclick="navigateTo('home')" class="cursor-pointer flex items-center space-x-2 absolute left-1/2 transform -translate-x-1/2">
-                                <i data-lucide="paw-print" class="w-8 h-8 text-light-green"></i> 
-                <h1 class="text-xl font-bold font-serif text-white hidden sm:block">TimePet</h1>
-            </div>
+            <div onclick="navigateTo('home')" class="cursor-pointer absolute left-1/2 transform -translate-x-1/2">
+                <img src="logo.png" alt="Logo Time Pet" class="h-8 object-contain">
+            </div>
 
-                        <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2">
 
-                                <a href="#" onclick="navigateTo('login')" id="login-link" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-2 p-2 rounded-lg">
-                    <span class="hidden sm:inline">Entrar</span>
-                    <i data-lucide="user-circle" class="text-light-green w-6 h-6"></i>
-                </a>
+                <a href="#" onclick="navigateTo('login')" id="login-link" class="text-white hover:text-light-green transition duration-200 flex items-center space-x-2 p-2 rounded-lg">
+                    <span class="hidden sm:inline">Entrar</span>
+                    <i data-lucide="user-circle" class="text-light-green w-6 h-6"></i>
+                </a>
 
-                                <div id="user-display" class="hidden">
-                                    </div>
-            </div>
-        </div>
-    </header>
+                <div id="user-display" class="hidden">
+                    </div>
+            </div>
+        </div>
+    </header>
 
-        <main id="home" class="page max-w-7xl mx-auto p-4 md:p-8 space-y-12">
+    <main id="home" class="page max-w-7xl mx-auto p-4 md:p-8 space-y-12">
 
-        <section>
-            <h2 class="text-2xl font-bold mb-4 text-dark-green border-b-2 border-light-green pb-2">Seção por espécie</h2>
-            <div class="scroll-container flex space-x-6 overflow-x-auto p-4 -m-4">
-                
-                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWni51qTFG5B38N_-eudrmp97iWhop6Xx9lw&s')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
-                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
-                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
-                        <i data-lucide="cat" class="w-8 h-8"></i>
-                        <h3 class="text-xl font-semibold">Gatos </h3>
-                    </div>
-                </div>
+        <section>
+            <h2 class="text-2xl font-bold mb-4 text-dark-green border-b-2 border-light-green pb-2">Seção por espécie</h2>
+            <div class="scroll-container flex space-x-6 overflow-x-auto p-4 -m-4">
+                
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWni51qTFG5B38N_-eudrmp97iWhop6Xx9lw&s')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
+                        <i data-lucide="cat" class="w-8 h-8"></i>
+                        <h3 class="text-xl font-semibold">Gatos </h3>
+                    </div>
+                </div>
 
-                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://static.vecteezy.com/ti/fotos-gratis/t2/31427303-feliz-e-engracado-animal-conceptual-surrealista-do-dois-sorridente-fofa-dourado-retriever-cachorros-levando-selfie-juntos-dentro-ensolarado-dia-nublado-azul-ceu-como-fundo-ai-generativo-foto.jpg')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
-                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
-                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
-                        <i data-lucide="dog" class="w-8 h-8"></i>
-                        <h3 class="text-xl font-semibold">Cachorros</h3>
-                    </div>
-                </div>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://static.vecteezy.com/ti/fotos-gratis/t2/31427303-feliz-e-engracado-animal-conceptual-surrealista-do-dois-sorridente-fufa-dourado-retriever-cachorros-levando-selfie-juntos-dentro-ensolarado-dia-nublado-azul-ceu-como-fundo-ai-generativo-foto.jpg')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
+                        <i data-lucide="dog" class="w-8 h-8"></i>
+                        <h3 class="text-xl font-semibold">Cachorros</h3>
+                    </div>
+                </div>
 
-                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://www.petz.com.br/blog/wp-content/uploads/2020/03/tipos-de-peixes-de-aquario-1.jpg')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
-                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
-                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
-                        <i data-lucide="fish" class="w-8 h-8"></i>
-                        <h3 class="text-xl font-semibold">Peixes</h3>
-                    </div>
-                </div>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://www.petz.com.br/blog/wp-content/uploads/2020/03/tipos-de-peixes-de-aquario-1.jpg')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
+                        <i data-lucide="fish" class="w-8 h-8"></i>
+                        <h3 class="text-xl font-semibold">Peixes</h3>
+                    </div>
+                </div>
 
-                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://www.petz.com.br/blog/wp-content/uploads/2020/01/passaros-domesticos.jpg')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
-                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
-                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
-                        <i data-lucide="bird" class="w-8 h-8"></i>
-                        <h3 class="text-xl font-semibold">Pássaros</h3>
-                    </div>
-                </div>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://www.petz.com.br/blog/wp-content/uploads/2020/01/passaros-domesticos.jpg')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
+                        <i data-lucide="bird" class="w-8 h-8"></i>
+                        <h3 class="text-xl font-semibold">Pássaros</h3>
+                    </div>
+                </div>
 
-                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://www.zooplus.pt/magazine/wp-content/uploads/2018/08/hamster.webp')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
-                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
-                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
-                        <i data-lucide="rabbit" class="w-8 h-8"></i>
-                        <h3 class="text-xl font-semibold">Roedores</h3>
-                    </div>
-                </div>
+                <div class="species-card flex-none w-64 h-80 rounded-xl shadow-md p-6 border-2 border-dark-green text-center flex flex-col items-center justify-end bg-[url('https://www.zooplus.pt/magazine/wp-content/uploads/2018/08/hamster.webp')] bg-cover bg-center relative group overflow-hidden cursor-pointer">
+                    <div class="absolute inset-0 bg-dark-green opacity-40 group-hover:opacity-60 transition duration-300"></div>
+                    <div class="relative z-10 text-white flex items-center justify-center space-x-2 p-4">
+                        <i data-lucide="rabbit" class="w-8 h-8"></i>
+                        <h3 class="text-xl font-semibold">Roedores</h3>
+                    </div>
+                </div>
 
-            </div>
-        </section>
+            </div>
+        </section>
 
-        <section>
-            <h2 class="text-2xl font-bold mb-6 text-dark-green border-b-2 border-light-green pb-2">Produtos mais buscados</h2>
-            <div id="recommended-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                
-                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
-                    <img src="https://placehold.co/400x300/22543d/68d391?text=Racao" alt="Ração Premium" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-dark-green"> Zoetis Apoquel </h3>
-                        <p class="text-sm text-gray-500 mb-2">Alimento completo e balanceado</p>
-                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
-                            <span class="text-sm font-semibold mr-1">R$</span>
-                            160,54
-                        </p>
-                        <button onclick="addToCart(901)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
-                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
+        <section>
+            <h2 class="text-2xl font-bold mb-6 text-dark-green border-b-2 border-light-green pb-2">Produtos mais buscados</h2>
+            <div id="recommended-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                
+                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+                    <img src="https://placehold.co/400x300/22543d/68d391?text=Racao" alt="Ração Premium" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-dark-green"> Zoetis Apoquel </h3>
+                        <p class="text-sm text-gray-500 mb-2">Alimento completo e balanceado</p>
+                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
+                            <span class="text-sm font-semibold mr-1">R$</span>
+                            160,54
+                        </p>
+                        <button onclick="addToCart(901)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
 
-                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
-                    <img src="https://placehold.co/400x300/68d391/22543d?text=Arranhador" alt="Arranhador Gato" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-dark-green">Arranhador para Gatos</h3>
-                        <p class="text-sm text-gray-500 mb-2">Poste de sisal e plataforma</p>
-                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
-                            <span class="text-sm font-semibold mr-1">R$</span>
-                            75,00
-                        </p>
-                        <button onclick="addToCart(902)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
-                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
-                    <img src="https://placehold.co/400x300/1e3a24/68d391?text=Petisco" alt="Petiscos Naturais" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-dark-green">Petiscos Naturais (100g)</h3>
-                        <p class="text-sm text-gray-500 mb-2">Livre de conservantes</p>
-                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
-                            <span class="text-sm font-semibold mr-1">R$</span>
-                            29,99
-                        </p>
-                        <button onclick="addToCart(903)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
-                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-        </section>
-    </main>
+                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+                    <img src="https://placehold.co/400x300/68d391/22543d?text=Arranhador" alt="Arranhador Gato" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-dark-green">Arranhador para Gatos</h3>
+                        <p class="text-sm text-gray-500 mb-2">Poste de sisal e plataforma</p>
+                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
+                            <span class="text-sm font-semibold mr-1">R$</span>
+                            75,00
+                        </p>
+                        <button onclick="addToCart(902)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-dark-green">
+                    <img src="https://placehold.co/400x300/1e3a24/68d391?text=Petisco" alt="Petiscos Naturais" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-dark-green">Petiscos Naturais (100g)</h3>
+                        <p class="text-sm text-gray-500 mb-2">Livre de conservantes</p>
+                        <p class="text-2xl font-bold text-light-green mb-3 flex items-baseline">
+                            <span class="text-sm font-semibold mr-1">R$</span>
+                            29,99
+                        </p>
+                        <button onclick="addToCart(903)" class="w-full bg-light-green text-dark-green font-bold py-2 rounded-lg hover:bg-green-400 transition duration-300 flex items-center justify-center">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+    </main>
 
-    <div id="login" class="page hidden max-w-md mx-auto p-4 md:p-8">
-        <h2 class="text-3xl font-bold text-center text-dark-green mb-8">Área de Login</h2>
-        <div class="bg-white p-6 rounded-xl shadow-2xl border border-light-green">
-            <form id="login-form" onsubmit="handleLogin(event)">
-                <div class="mb-4">
-                    <label for="login-email" class="block text-dark-green font-semibold mb-2">Email:</label>
-                    <input type="email" id="login-email" name="email" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
-                </div>
-                <div class="mb-6">
-                    <label for="login-password" class="block text-dark-green font-semibold mb-2">Senha:</label>
-                    <input type="password" id="login-password" name="password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
-                </div>
-                <button type="submit" class="w-full bg-dark-green text-white font-bold py-3 rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
-                    Entrar
-                </button>
-            </form>
-            <p class="text-center text-sm text-gray-500 mt-4">Não tem conta? <a href="#" onclick="event.preventDefault(); navigateTo('register')" class="text-light-green hover:underline">Cadastre-se</a></p>
-        </div>
-    </div>
-    
-    <hr>
+    <div id="login" class="page hidden max-w-md mx-auto p-4 md:p-8">
+        <h2 class="text-3xl font-bold text-center text-dark-green mb-8">Área de Login</h2>
+        <div class="bg-white p-6 rounded-xl shadow-2xl border border-light-green">
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label for="login-email" class="block text-dark-green font-semibold mb-2">Email:</label>
+                    <input type="email" id="login-email" name="email" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
+                </div>
+                <div class="mb-6">
+                    <label for="login-password" class="block text-dark-green font-semibold mb-2">Senha:</label>
+                    <input type="password" id="login-password" name="password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
+                </div>
+                <button type="submit" class="w-full bg-dark-green text-white font-bold py-3 rounded-lg hover:bg-green-700 transition duration-300 shadow-md">
+                    Entrar
+                </button>
+            </form>
+            <p class="text-center text-sm text-gray-500 mt-4">Não tem conta? <a href="#" onclick="event.preventDefault(); navigateTo('register')" class="text-light-green hover:underline">Cadastre-se</a></p>
+        </div>
+    </div>
+    
+    <hr>
 
-    <div id="register" class="page hidden max-w-md mx-auto p-4 md:p-8">
-        <h2 class="text-3xl font-bold text-center text-dark-green mb-8">Crie sua Conta</h2>
-        <div class="bg-white p-6 rounded-xl shadow-2xl border border-light-green">
-            <form id="register-form" onsubmit="handleRegister(event)">
-                <div class="mb-4">
-                    <label for="register-name" class="block text-dark-green font-semibold mb-2">Nome:</label>
-                    <input type="text" id="register-name" name="name" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
-                </div>
-                <div class="mb-4">
-                    <label for="register-email" class="block text-dark-green font-semibold mb-2">Email:</label>
-                    <input type="email" id="register-email" name="email" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
-                </div>
-                <div class="mb-4">
-                    <label for="register-password" class="block text-dark-green font-semibold mb-2">Senha:</label>
-                    <input type="password" id="register-password" name="password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
-                </div>
-                <div class="mb-6">
-                    <label for="register-confirm-password" class="block text-dark-green font-semibold mb-2">Confirmar Senha:</label>
-                    <input type="password" id="register-confirm-password" name="confirm-password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
-                </div>
-                <button type="submit" class="w-full bg-light-green text-dark-green font-bold py-3 rounded-lg hover:bg-green-400 transition duration-300 shadow-md">
-                    Cadastrar
-                </button>
-            </form>
-            <p class="text-center text-sm text-gray-500 mt-4">Já possui conta? <a href="#" onclick="event.preventDefault(); navigateTo('login')" class="text-dark-green hover:underline">Faça Login</a></p>
-            
-            <p class="text-center text-sm mt-4">Problemas? <a href="#" onclick="event.preventDefault(); navigateTo('delete')" class="text-red-600 hover:underline font-semibold">Excluir conta</a></p>
-            
-        </div>
-    </div>
-    
-    <div id="delete" class="page hidden max-w-md mx-auto p-4 md:p-8">
-        <h2 class="text-3xl font-bold text-center text-red-600 mb-8">Excluir Conta Permanentemente</h2>
-        <div class="bg-white p-6 rounded-xl shadow-2xl border-2 border-red-500">
-            <p class="text-center mb-6 text-gray-700"><strong>ATENÇÃO:</strong> Esta ação é irreversível. Insira suas credenciais para confirmar a exclusão de todos os seus dados.</p>
-            
-            <form id="delete-account-form" onsubmit="event.preventDefault()">
-                <div class="mb-4">
-                    <label for="deleteEmail" class="block text-dark-green font-semibold mb-2">E-mail de Confirmação:</label>
-                    <input type="email" id="deleteEmail" name="email" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" required>
-                </div>
-                <div class="mb-6">
-                    <label for="deletePassword" class="block text-dark-green font-semibold mb-2">Senha de Confirmação:</label>
-                    <input type="password" id="deletePassword" name="password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" required>
-                </div>
-                <button 
-                    type="button" 
-                    onclick="handleDeleteAccount()"
-                    class="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition duration-300 shadow-md"
-                >
-                    Confirmar e EXCLUIR CONTA
-                </button>
-            </form>
-            <p class="text-center text-sm mt-4"><a href="#" onclick="event.preventDefault(); navigateTo('login')" class="text-dark-green hover:underline">Cancelar e Voltar ao Login</a></p>
-        </div>
-    </div>
-    <hr>
+    <div id="register" class="page hidden max-w-md mx-auto p-4 md:p-8">
+        <h2 class="text-3xl font-bold text-center text-dark-green mb-8">Crie sua Conta</h2>
+        <div class="bg-white p-6 rounded-xl shadow-2xl border border-light-green">
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="mb-4">
+                    <label for="register-name" class="block text-dark-green font-semibold mb-2">Nome:</label>
+                    <input type="text" id="register-name" name="name" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
+                </div>
+                <div class="mb-4">
+                    <label for="register-email" class="block text-dark-green font-semibold mb-2">Email:</label>
+                    <input type="email" id="register-email" name="email" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
+                </div>
+                <div class="mb-4">
+                    <label for="register-password" class="block text-dark-green font-semibold mb-2">Senha:</label>
+                    <input type="password" id="register-password" name="password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
+                </div>
+                <div class="mb-6">
+                    <label for="register-confirm-password" class="block text-dark-green font-semibold mb-2">Confirmar Senha:</label>
+                    <input type="password" id="register-confirm-password" name="confirm-password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-light-green focus:border-light-green" required>
+                </div>
+                <button type="submit" class="w-full bg-light-green text-dark-green font-bold py-3 rounded-lg hover:bg-green-400 transition duration-300 shadow-md">
+                    Cadastrar
+                </button>
+            </form>
+            <p class="text-center text-sm text-gray-500 mt-4">Já possui conta? <a href="#" onclick="event.preventDefault(); navigateTo('login')" class="text-dark-green hover:underline">Faça Login</a></p>
+            
+            <p class="text-center text-sm mt-4">Problemas? <a href="#" onclick="event.preventDefault(); navigateTo('delete')" class="text-red-600 hover:underline font-semibold">Excluir conta</a></p>
+            
+        </div>
+    </div>
+    
+    <div id="delete" class="page hidden max-w-md mx-auto p-4 md:p-8">
+        <h2 class="text-3xl font-bold text-center text-red-600 mb-8">Excluir Conta Permanentemente</h2>
+        <div class="bg-white p-6 rounded-xl shadow-2xl border-2 border-red-500">
+            <p class="text-center mb-6 text-gray-700"><strong>ATENÇÃO:</strong> Esta ação é irreversível. Insira suas credenciais para confirmar a exclusão de todos os seus dados.</p>
+            
+            <form id="delete-account-form" onsubmit="event.preventDefault()">
+                <div class="mb-4">
+                    <label for="deleteEmail" class="block text-dark-green font-semibold mb-2">E-mail de Confirmação:</label>
+                    <input type="email" id="deleteEmail" name="email" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" required>
+                </div>
+                <div class="mb-6">
+                    <label for="deletePassword" class="block text-dark-green font-semibold mb-2">Senha de Confirmação:</label>
+                    <input type="password" id="deletePassword" name="password" class="w-full px-4 py-2 border border-dark-green rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" required>
+                </div>
+                <button 
+                    type="button" 
+                    onclick="handleDeleteAccount()"
+                    class="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition duration-300 shadow-md"
+                >
+                    Confirmar e EXCLUIR CONTA
+                </button>
+            </form>
+            <p class="text-center text-sm mt-4"><a href="#" onclick="event.preventDefault(); navigateTo('login')" class="text-dark-green hover:underline">Cancelar e Voltar ao Login</a></p>
+        </div>
+    </div>
+    <hr>
 
-    <div id="cart" class="page hidden max-w-4xl mx-auto p-4 md:p-8">
-        <h2 class="text-3xl font-bold text-dark-green mb-6 border-b-2 border-light-green pb-2">Carrinho de compras</h2>
-        <div id="cart-items-container" class="space-y-4">
-            </div>
-        <div id="cart-summary" class="mt-8 pt-4 border-t-2 border-dark-green flex justify-between items-center">
-            <h3 class="text-xl font-bold text-dark-green">Total: <span id="cart-total" class="text-2xl text-light-green">R$ 0,00</span></h3>
-            <button onclick="checkout()" class="bg-light-green text-dark-green font-bold py-3 px-8 rounded-lg hover:bg-green-300 transition duration-300 shadow-lg">
-                Fechar pedido
-            </button>
-        </div>
-        <div id="message-box" class="fixed top-20 right-4 p-4 rounded-lg shadow-xl text-white hidden transition-opacity duration-300 opacity-0 z-50"></div>
-    </div>
+    <div id="cart" class="page hidden max-w-4xl mx-auto p-4 md:p-8">
+        <h2 class="text-3xl font-bold text-dark-green mb-6 border-b-2 border-light-green pb-2">Carrinho de compras</h2>
+        <div id="cart-items-container" class="space-y-4">
+            </div>
+        <div id="cart-summary" class="mt-8 pt-4 border-t-2 border-dark-green flex justify-between items-center">
+            <h3 class="text-xl font-bold text-dark-green">Total: <span id="cart-total" class="text-2xl text-light-green">R$ 0,00</span></h3>
+            <button onclick="checkout()" class="bg-light-green text-dark-green font-bold py-3 px-8 rounded-lg hover:bg-green-300 transition duration-300 shadow-lg">
+                Fechar pedido
+            </button>
+        </div>
+        <div id="message-box" class="fixed top-20 right-4 p-4 rounded-lg shadow-xl text-white hidden transition-opacity duration-300 opacity-0 z-50"></div>
+    </div>
 
-    <footer class="bg-dark-green text-white text-center p-4 mt-12 text-sm">
-        <p>&copy; 2025 Time Pet - Todos os direitos reservados</p>
-    </footer>
+    <footer class="bg-dark-green text-white text-center p-4 mt-12 text-sm">
+        <p>&copy; 2025 Time Pet - Todos os direitos reservados</p>
+    </footer>
 
 </div>
 
