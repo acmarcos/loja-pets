@@ -1,5 +1,10 @@
 {
+  "name": "loja-pets",
+  "version": "1.0.0",
+  // ... outras configurações
   "dependencies": {
-    "bcrypt": "^6.0.0"
+    "bcrypt": "^5.1.1",
+    "mongodb": "^6.8.0", // VERSÃO NECESSÁRIA PARA O CLIENTE MONGO
+    // ... outras dependências
   }
 }
