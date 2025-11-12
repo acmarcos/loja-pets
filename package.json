@@ -7,7 +7,7 @@
     "start": "vercel dev"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.3",
     "mongodb": "^6.8.0"
   }
 }

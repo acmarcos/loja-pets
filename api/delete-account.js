@@ -1,6 +1,8 @@
 // api/delete-account.js
+
+// 🚨 CORREÇÃO: Trocado 'bcrypt' por 'bcryptjs' para compatibilidade com o ambiente Vercel.
 import { MongoClient } from 'mongodb';
-import bcrypt from 'bcrypt'; 
+import bcrypt from 'bcryptjs'; 
 
 // Variáveis de Ambiente e Cache (melhor prática Vercel)
 const uri = process.env.MONGO_URI;
@@ -26,10 +28,12 @@ async function connectToDatabase() {
     }
 
     cached.conn = await cached.promise;
+    // O nome do seu banco é TimePet, confirmado pelas capturas
     return cached.conn.db('TimePet'); 
 }
 
 export default async function handler(req, res) {
+    // Permite POST (do frontend que usa fetch) ou DELETE (se fosse um cliente REST)
     if (req.method !== 'POST' && req.method !== 'DELETE') {
         res.setHeader('Allow', ['POST', 'DELETE']);
         return res.status(405).send({ message: 'Método não permitido.' });
@@ -49,13 +53,14 @@ export default async function handler(req, res) {
         const user = await usersCollection.findOne({ email });
 
         if (!user) {
-            // Retorna sucesso para evitar que atacantes descubram e-mails existentes
-            return res.status(200).json({ message: 'Conta excluída ou não encontrada.' });
+            // Retorna 401 ou 200 (para segurança)
+            // Mantido 401 para o cliente saber que a credencial falhou.
+            return res.status(401).json({ message: 'Credenciais inválidas.' });
         }
 
         // 2. PASSO CRUCIAL: COMPARA A SENHA EM TEXTO PURO COM O HASH
-        // O bcrypt.compare() lida com a criptografia internamente.
-        const isPasswordValid = await bcrypt.compare(password, user.password); // <--- A MÁGICA ACONTECE AQUI
+        // Usando bcryptjs.compare()
+        const isPasswordValid = await bcrypt.compare(password, user.password); // <--- AGORA COM bcryptjs
 
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Senha incorreta. Não foi possível confirmar a exclusão.' });
@@ -70,11 +75,13 @@ export default async function handler(req, res) {
                 success: true
             });
         } else {
-            return res.status(500).json({ message: 'Falha ao deletar a conta.' });
+            // Este caso é improvável se o findOne foi bem-sucedido
+            return res.status(500).json({ message: 'Falha ao deletar a conta (Registro não encontrado).' });
         }
 
     } catch (error) {
         console.error('Erro na Serverless Function de exclusão:', error);
-        return res.status(500).json({ message: 'Erro interno do servidor.' });
+        // Retorna 500 se houver um erro de conexão com o Mongo ou erro desconhecido.
+        return res.status(500).json({ message: 'Erro interno do servidor. Verifique os logs do Vercel.' });
     }
 }

@@ -1,6 +1,7 @@
 // api/register.js
 import { MongoClient } from 'mongodb';
-import bcrypt from 'bcrypt';
+// 🚨 CORREÇÃO CRÍTICA: Trocado 'bcrypt' por 'bcryptjs'
+import bcrypt from 'bcryptjs';
 
 // URL de conexão de ambiente (deve ser configurada no Vercel como MONGO_URI)
 const uri = process.env.MONGO_URI;
@@ -58,7 +59,7 @@ export default async function handler(req, res) {
             return res.status(409).json({ message: 'Este e-mail já está em uso.' });
         }
         
-        // 2. Criptografar a senha
+        // 2. Criptografar a senha - AGORA USANDO bcryptjs
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // 3. Criar e inserir o novo usuário
