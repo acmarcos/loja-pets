@@ -1,50 +1,80 @@
-// Adicione esta função ao seu script.js
+// api/delete-account.js
+import { MongoClient } from 'mongodb';
+import bcrypt from 'bcrypt'; 
 
-async function handleDeleteAccount() {
-    // 1. Coleta os dados dos campos do formulário
-    const email = document.getElementById('deleteEmail').value;
-    const password = document.getElementById('deletePassword').value;
+// Variáveis de Ambiente e Cache (melhor prática Vercel)
+const uri = process.env.MONGO_URI;
+let cached = global.mongo; 
+
+if (!cached) {
+    cached = global.mongo = { conn: null, promise: null };
+}
+
+async function connectToDatabase() {
+    if (!uri) {
+        throw new Error("ERRO CRÍTICO: Variável MONGO_URI não configurada no Vercel.");
+    }
     
-    // Pega o elemento para exibir mensagens de erro/sucesso
-    const messageElement = document.getElementById('deleteMessage');
-    messageElement.textContent = ''; // Limpa mensagens anteriores
-
-    if (!email || !password) {
-        messageElement.textContent = 'Por favor, insira seu e-mail e senha para confirmar.';
-        return;
+    if (cached.conn) {
+        return cached.conn.db('TimePet');
     }
 
-    // Confirmação final de segurança
-    const confirmation = confirm("AVISO FINAL: Esta ação é permanente e irá deletar sua conta e todos os dados associados. Deseja realmente continuar?");
-    if (!confirmation) {
-        return;
+    if (!cached.promise) {
+        cached.promise = MongoClient.connect(uri).then((client) => {
+            return client; 
+        });
+    }
+
+    cached.conn = await cached.promise;
+    return cached.conn.db('TimePet'); 
+}
+
+export default async function handler(req, res) {
+    if (req.method !== 'POST' && req.method !== 'DELETE') {
+        res.setHeader('Allow', ['POST', 'DELETE']);
+        return res.status(405).send({ message: 'Método não permitido.' });
+    }
+
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+        return res.status(400).json({ message: 'E-mail e senha são obrigatórios para confirmar a exclusão.' });
     }
 
     try {
-        // 2. Envia a requisição para a Serverless Function
-        const response = await fetch('/api/delete-account', {
-            method: 'POST', // Usamos POST para enviar o corpo JSON
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
+        const db = await connectToDatabase();
+        const usersCollection = db.collection('users'); 
 
-        // 3. Processa a resposta do servidor (API)
-        const data = await response.json();
+        // 1. BUSCA O USUÁRIO PELO EMAIL
+        const user = await usersCollection.findOne({ email });
 
-        if (response.ok) {
-            // Sucesso (Status 200) - Conta excluída
-            alert('Conta excluída com sucesso! Você será redirecionado para a página inicial.');
-            window.location.href = '/'; // Redireciona o usuário
+        if (!user) {
+            // Retorna sucesso para evitar que atacantes descubram e-mails existentes
+            return res.status(200).json({ message: 'Conta excluída ou não encontrada.' });
+        }
+
+        // 2. PASSO CRUCIAL: COMPARA A SENHA EM TEXTO PURO COM O HASH
+        // O bcrypt.compare() lida com a criptografia internamente.
+        const isPasswordValid = await bcrypt.compare(password, user.password); // <--- A MÁGICA ACONTECE AQUI
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Senha incorreta. Não foi possível confirmar a exclusão.' });
+        }
+
+        // 3. AUTENTICAÇÃO BEM-SUCEDIDA: EXCLUI A CONTA
+        const result = await usersCollection.deleteOne({ email });
+
+        if (result.deletedCount === 1) {
+            return res.status(200).json({ 
+                message: 'Sua conta foi excluída com sucesso.',
+                success: true
+            });
         } else {
-            // Falha (Status 400, 401, 500, etc.)
-            messageElement.textContent = 'Erro: ' + (data.message || 'Falha desconhecida ao excluir conta.');
-            // Se o erro for 401 (senha incorreta), o backend retorna a mensagem específica.
+            return res.status(500).json({ message: 'Falha ao deletar a conta.' });
         }
 
     } catch (error) {
-        console.error('Erro de conexão ou requisição:', error);
-        messageElement.textContent = 'Erro de conexão com o servidor. Verifique sua rede.';
+        console.error('Erro na Serverless Function de exclusão:', error);
+        return res.status(500).json({ message: 'Erro interno do servidor.' });
     }
 }
